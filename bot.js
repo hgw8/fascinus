@@ -3,20 +3,20 @@ var fs = require("fs");
 var request = require('request');
 var art = require('ascii-art');
 var crypto = require('crypto').webcrypto;
-var randomext = require('./random-ext')
+var randomext = require('./random')
 
 var config = { //edit your shit here
-	server: "irc.supernets.org",
+    server: "irc.supernets.org",
     port: 6697,
     SSL: true,
     channels: ['#superbowl', '#dev'],
-	botName: "fascinus",
+    botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
 };
 
 var bot = new irc.Client(config.server, config.botName, {
-	channels: config.channels,
+    channels: config.channels,
     secure: config.SSL,
     port: config.port,
     autoRejoin: true,
@@ -25,6 +25,8 @@ var bot = new irc.Client(config.server, config.botName, {
     floodProtection: false,
     floodProtectionDelay: 0
 });
+
+const timer = ms => new Promise(res => setTimeout(res, ms))
 
 const generateRandomString = (amt) => {
     const chars =
@@ -70,17 +72,15 @@ async function ctcp(target, text, amt) {
 
 async function rspam(chan, amt) {
     for(var i=0; i < amt; i++){
-        bot.say(chan, generateRandomString(60));
+        bot.say(chan, generateRandomString(randomext.integer(100,60)));
     }    
 }
 
 async function uspam(chan, amt){
     for(var i=0; i < amt; i++){
-        bot.say(chan, "0" + randomext.integer(9,0) + randomext.uString(60,40));
+        bot.say(chan, "0" + randomext.integer(9,0) + randomext.uString(120,40));
     }    
 }
-
-const timer = ms => new Promise(res => setTimeout(res, ms))
 
 bot.addListener('message', function(nick, to, text, from) {
     var args = text.split(' ');
