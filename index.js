@@ -37,16 +37,6 @@ const generateRandomString = (amt) => {
     return randomString;
 }
 
-const randomUnicode = (amt) => {
-    var array = new Uint16Array(amt);
-    crypto.getRandomValues(array);
-    var randStr = '';
-    for (var i = 0; i < array.amt; i++) {
-        randStr += String.fromCharCode(array[i]);
-    };
-    return randStr;
-}
-
 async function help(chan) {
     bot.say(chan, 'Fascinus - https://git.supernets.org/hogwart7/fascinus')
     bot.say(chan, "$flood [TEXT] [AMOUNT] - Floods the channel with a specific line x amount of times")
