@@ -50,10 +50,12 @@ const randomUnicode = (amt) => {
 }
 
 async function help(chan) {
-    bot.say(chan, 'Fascinus')
+    bot.say(chan, 'Fascinus - https://git.supernets.org/hogwart7/fascinus')
     bot.say(chan, "$flood [TEXT] [AMOUNT] - Floods the channel with a specific line x amount of times")
     bot.say(chan, "$ctcpflood [TARGET] [TEXT (one word)] [AMOUNT] - Sends x amount of CTCP requests to a target.")
     bot.say(chan, "$sneed - Pastes the Sneed's Feed and Seed copypasta.")
+    bot.say(chan, "$rspam [LINES] - Spams x lines of random characters")
+    bot.say(chan, "$uspam [LINES] - Spams x lines of random unicode characters of varying length")
 }
 
 async function flood(text, chan, times) {
