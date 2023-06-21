@@ -1,5 +1,6 @@
 version: '3.3'
 services:
     fascinus:
+        container_name: fascinus
         build: .
         restart: always
