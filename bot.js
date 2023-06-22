@@ -9,7 +9,7 @@ var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#fascinus'],
+    channels: ['#dev'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -107,11 +107,14 @@ async function rspam(chan, amt) {
 }
 
 async function art(chan, url) {
+
     var ext = path.extname(url)
     if (ext === ".png") { 
         var filetype = "png"
     } else if (ext === ".jpg") {
         var filetype = "jpg"
+    } else if (ext === ".webp") {
+        var filetype = "webp"
     } else {
         bot.say(chan, "Image must be PNG or JPG");
         return
@@ -122,7 +125,7 @@ async function art(chan, url) {
     pythonProcess.stdout.on('data', (data) => {
         console.log(data.toString())
     });
-    await timer(1000);
+    await timer(5000);
     fs.stat('output.txt', function(err, stat) {
         if (err == null) {
             console.log('File exists');
@@ -134,9 +137,10 @@ async function art(chan, url) {
                 bot.say(chan, line);
             });   
         } else if (err.code === 'ENOENT') {
+            console.log(err);
             bot.say(chan, "Error")
         } else {
-            bot.say(chan, "Error")
+            bot.say(chan, "Other Error")
         }
     });
 }

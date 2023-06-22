@@ -11,25 +11,32 @@ import validators
 import wget
 import subprocess
 import glob, os
+import requests
 
 def main(imgPath, delay, ASCIIWIDTH, COLORCHAR, FILLER, fileType):
+    if os.path.exists("image.png"):
+        os.remove("image.png")
+    if os.path.exists("image.jpg"):
+        os.remove("image.jpg")    
+    if os.path.exists("image.webp"):
+        os.remove("image.webp")
+    if os.path.exists("output.txt"):
+        os.remove("output.txt")
     if validators.url(imgPath) == True:
-        for f in glob.glob("P*.png"):
-            os.remove(f)
-        for f in glob.glob("P*.jpg"):
-            os.remove(f)    
-        if os.path.exists("output.txt"):
-            os.remove("output.txt")
         print('URL')
         print('Downloading image to ' +  "/home/node/app/image." + fileType)
-        wget.download(imgPath, "/home/node/app/image." + fileType)
-        #subprocess.run(["wget", imgPath, "-o", "image." + fileType])
+        #wget.download(imgPath, "/home/node/app/image." + fileType)
+        imagefile = requests.get(imgPath)
+        open("/home/node/app/image." + fileType, "wb").write(imagefile.content)
         if fileType == "png":
             print('PNG')
             imgPath = "/home/node/app/image.png"
         if fileType == "jpg":
             print('JPG')
             imgPath = "/home/node/app/image.jpg"
+        if fileType == "webp":
+            print('WEBP')
+            imgPath = "/home/node/app/image.webp"
     
     im = Image.open(imgPath, 'r')
     im = ImageOps.scale(im, ASCIIWIDTH / im.width)
