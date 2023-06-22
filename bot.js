@@ -86,8 +86,8 @@ async function uspam(chan, amt) {
         bot.say(chan, "no")
     } else {
         for(var i=0; i < amt; i++){
-            var string = "" + randomext.integer(9,0) + randomext.uString(120,40);
-            await timer(5);
+            var string = "" + randomext.integer(9,0) + "," + randomext.integer(9,0) + randomext.uString(120,60);
+            await timer(10);
             bot.say(chan, string);
         }    
     }
