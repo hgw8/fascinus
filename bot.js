@@ -9,7 +9,7 @@ var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#dev'],
+    channels: ['#dev', '#superbowl'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -78,16 +78,24 @@ async function ctcp(target, text, amt) {
     }
 }
 
-async function spam(chan, amt, type) {
+async function uspam(chan, amt) {
     if (amt > 100000) {
         bot.say(chan, "no")
     } else {
         for(var i=0; i < amt; i++){
-            if (type == "unicode") {
-                var string = randomext.integer(9,0) + randomext.uString(120,40);
-            } else if (type == "random") {
-                var string = generateRandomString(70);
-            }
+            var string = randomext.integer(9,0) + randomext.uString(120,40);
+            await timer(5);
+            bot.say(chan, string);
+        }    
+    }
+}
+
+async function rspam(chan, amt) {
+    if (amt > 100000) {
+        bot.say(chan, "no")
+    } else {
+        for(var i=0; i < amt; i++){
+            var string = generateRandomString(70);
             await timer(5);
             bot.say(chan, string);
         }    
@@ -108,9 +116,9 @@ bot.addListener('message', function(nick, to, text, from) {
     } else if (args[0] === '$ctcpflood') {
         ctcp(args[1], args[2], args[3]);
     } else if (args[0] === '$rspam') {
-        spam(to, args[1], "random")
+        rspam(to, args[1])
     } else if (args[0] === '$uspam') {
-        spam(to, args[1], "unicode");
+        uspam(to, args[1]);
     }
 });
 
