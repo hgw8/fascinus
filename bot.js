@@ -1,15 +1,15 @@
 var irc = require("irc");
 var fs = require("fs");
-var request = require('request');
-var art = require('ascii-art');
-var crypto = require('crypto').webcrypto;
-var randomext = require('./random')
+var readline = require('readline');
+var path = require('path');
+var randomext = require('./random');
+const { nextTick } = require("process");
 
 var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#dev'],
+    channels: ['#fascinus'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -46,6 +46,7 @@ async function help(chan) {
     bot.say(chan, "$sneed - Pastes the Sneed's Feed and Seed copypasta.")
     bot.say(chan, "$rspam [LINES] - Spams x lines of random characters")
     bot.say(chan, "$uspam [LINES] - Spams x lines of random unicode characters of varying length")
+    bot.say(chan, "$art [IMAGE URL (png/jpg)] - Creates IRC art using a source image.")
 }
 
 async function flood(chan, arg) {
@@ -105,6 +106,42 @@ async function rspam(chan, amt) {
     }
 }
 
+async function art(chan, url) {
+    var ext = path.extname(url)
+    if (ext === ".png") { 
+        var filetype = "png"
+    } else if (ext === ".jpg") {
+        var filetype = "jpg"
+    } else {
+        bot.say(chan, "Image must be PNG or JPG");
+        return
+    }
+    console.log("Starting Banter")
+    const spawn = require("child_process").spawn;
+    const pythonProcess = spawn('python3', ["banter/banter.py", url, "-t", filetype]) 
+    pythonProcess.stdout.on('data', (data) => {
+        console.log(data.toString())
+    });
+    await timer(1000);
+    fs.stat('output.txt', function(err, stat) {
+        if (err == null) {
+            console.log('File exists');
+            const rl = readline.createInterface({
+                input: fs.createReadStream('output.txt'),
+                crlfDelay: Infinity,
+            });
+            rl.on('line', (line) => {
+                bot.say(chan, line);
+            });   
+        } else if (err.code === 'ENOENT') {
+            bot.say(chan, "Error")
+        } else {
+            bot.say(chan, "Error")
+        }
+    });
+}
+
+
 bot.addListener('message', function(nick, to, text, from) {
     var args = text.split(' ');
     if (args[0] === '$help') {
@@ -119,6 +156,8 @@ bot.addListener('message', function(nick, to, text, from) {
         rspam(to, args[1])
     } else if (args[0] === '$uspam') {
         uspam(to, args[1]);
+    } else if (args[0] === '$art') {
+        art(to, args[1]);
     }
 });
 

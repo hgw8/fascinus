@@ -74,7 +74,7 @@ if __name__ == "__main__":
         args.file,
         float(args.d),
         int(args.w),
-        str(args.t),
         args.colorfmt.encode().decode("unicode_escape"),
-        args.filler.encode().decode("unicode_escape")
+        args.filler.encode().decode("unicode_escape"),
+        str(args.t)
     )
