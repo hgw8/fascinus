@@ -41,7 +41,7 @@ const generateRandomString = (amt) => {
 
 async function help(chan) {
     bot.say(chan, 'Fascinus - https://git.supernets.org/hogwart7/fascinus')
-    bot.say(chan, "$flood [TEXT] [AMOUNT] - Floods the channel with a specific line x amount of times")
+    bot.say(chan, "$flood [AMOUNT] [TEXT] - Floods the channel with a specific line x amount of times")
     bot.say(chan, "$ctcpflood [TARGET] [TEXT (one word)] [AMOUNT] - Sends x amount of CTCP requests to a target.")
     bot.say(chan, "$sneed - Pastes the Sneed's Feed and Seed copypasta.")
     bot.say(chan, "$rspam [LINES] - Spams x lines of random characters")
@@ -99,7 +99,10 @@ bot.addListener('message', function(nick, to, text, from) {
     if (args[0] === '$help') {
         help(to);
     } else if (args[0] === '$flood') {
-        flood(args[1], to, args[2]);
+        args.shift()
+        let amt = args.shift()
+        var string = args.join(" ")
+        flood(string, to, amt);
     } else if (args[0] === '$sneed') {
         sneed(to);
     } else if (args[0] === '$ctcpflood') {
