@@ -20,9 +20,8 @@ def main(imgPath, delay, ASCIIWIDTH, COLORCHAR, FILLER, fileType):
             os.remove(f)    
         if os.path.exists("output.txt"):
             os.remove("output.txt")
-        print(imgPath)
         print('URL')
-        print('Downloading: ' +  "/home/node/app/image." + fileType)
+        print('Downloading image to ' +  "/home/node/app/image." + fileType)
         wget.download(imgPath, "/home/node/app/image." + fileType)
         #subprocess.run(["wget", imgPath, "-o", "image." + fileType])
         if fileType == "png":
@@ -32,7 +31,6 @@ def main(imgPath, delay, ASCIIWIDTH, COLORCHAR, FILLER, fileType):
             print('JPG')
             imgPath = "/home/node/app/image.jpg"
     
-    print(imgPath)
     im = Image.open(imgPath, 'r')
     im = ImageOps.scale(im, ASCIIWIDTH / im.width)
     width, height = im.size
@@ -76,7 +74,7 @@ if __name__ == "__main__":
         args.file,
         float(args.d),
         int(args.w),
+        str(args.t),
         args.colorfmt.encode().decode("unicode_escape"),
-        args.filler.encode().decode("unicode_escape"),
-        str(args.t)
+        args.filler.encode().decode("unicode_escape")
     )
