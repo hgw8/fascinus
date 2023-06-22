@@ -48,9 +48,13 @@ async function help(chan) {
     bot.say(chan, "$uspam [LINES] - Spams x lines of random unicode characters of varying length")
 }
 
-async function flood(text, chan, times) {
-    for(var i=0; i < times; i++){
-        bot.say(chan, text);
+async function flood(text, chan, amt) {
+    if (amt > '100000') {
+        bot.say(chan, "no");
+    } else {
+        for(var i=0; i < amt; i++){
+            bot.say(chan, text);
+        }
     }
 }
 
@@ -64,22 +68,34 @@ async function sneed(chan) {
 }
 
 async function ctcp(target, text, amt) {
-    for(var i=0; i < amt; i++){
-        bot.ctcp(target, "privmsg", text);
-        await timer(1000);
-    }    
+    if (amt > '100000') {
+        bot.say(chan, "no");
+    } else {
+        for(var i=0; i < amt; i++){
+            bot.ctcp(target, "privmsg", text);
+            await timer(1000);
+        }    
+    }
 }
 
 async function rspam(chan, amt) {
-    for(var i=0; i < amt; i++){
-        bot.say(chan, generateRandomString(randomext.integer(100,60)));
-    }    
+    if (amt > '100000') {
+        bot.say(chan, "no")
+    } else {
+        for(var i=0; i < amt; i++){
+            bot.say(chan, generateRandomString(randomext.integer(100,60)));
+        }    
+    }
 }
 
 async function uspam(chan, amt){
-    for(var i=0; i < amt; i++){
-        bot.say(chan, "0" + randomext.integer(9,0) + randomext.uString(120,40));
-    }    
+    if (amt > '100000') {
+        bot.say(chan, "no")
+    } else {
+        for(var i=0; i < amt; i++){
+            bot.say(chan, "0" + randomext.integer(9,0) + randomext.uString(120,40));
+        }    
+    }
 }
 
 bot.addListener('message', function(nick, to, text, from) {
