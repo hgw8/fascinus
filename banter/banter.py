@@ -26,7 +26,8 @@ def main(imgPath, delay, ASCIIWIDTH, COLORCHAR, FILLER, fileType):
         print('URL')
         print('Downloading image to ' +  "/home/node/app/image." + fileType)
         #wget.download(imgPath, "/home/node/app/image." + fileType)
-        imagefile = requests.get(imgPath)
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0'}
+        imagefile = requests.get(imgPath, headers=headers)
         open("/home/node/app/image." + fileType, "wb").write(imagefile.content)
         if fileType == "png":
             print('PNG')
