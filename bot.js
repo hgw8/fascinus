@@ -47,7 +47,7 @@ async function help(chan) {
     bot.say(chan, "$sneed - Pastes the Sneed's Feed and Seed copypasta.")
     bot.say(chan, "$rspam [LINES (def=100, max=100000)] - Spams x lines of random characters")
     bot.say(chan, "$uspam [LINES (def=100, max=100000))] - Spams x lines of random unicode characters of varying length")
-    bot.say(chan, "$art [IMAGE URL (png/jpg)] - Creates IRC art using a source image.")
+    bot.say(chan, "$art [IMAGE URL (png/jpg/webp/jpeg)] - Creates IRC art using a source image.")
     bot.say(chan, "$godwords [AMOUNT (def=50, max=100000)] - Generate x amount of random words. Inspired by TempleOS.")
 }
 
