@@ -5,4 +5,4 @@ COPY package*.json ./
 USER node
 RUN npm i
 COPY --chown=node:node . .
-CMD [ "node", "index.js" ]
+CMD [ "node", "bot.js" ]
