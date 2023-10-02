@@ -3,7 +3,8 @@ var fs = require("fs");
 var readline = require('readline');
 var path = require('path');
 var randomext = require('./random');
-var randomWords = require('better-random-words');
+const { Worker } = require('worker_threads');
+//var randomWords = require('better-random-words');
 
 var config = { //edit your shit here
     server: "irc.supernets.org",
@@ -156,16 +157,24 @@ async function godwords(chan, amt) {
     if (amt > 100000) {
         bot.say(chan, "no")
     } else {
-        text = [];
+        
         if (amt === undefined) {
             var amt = 50
         }
-        for(var i=0; i < amt; i++){
-            var word = randomWords({ exactly: 1 });
-            text.push(word);
-            var string = text.join(" ")  
-        }
-        bot.say(chan, string);
+        //for(var i=0; i < amt; i++){
+        //    var word = randomWords({ exactly: 1 });
+        //    text.push(word);
+        //    var string = text.join(" ")  
+        //}
+        const worker = new Worker('./wordgen.js', { 
+            workerData: {
+                amt
+            }
+        });
+        worker.once('message', (string) => {
+            console.log('Received the hashedArray from the worker thread!');
+            bot.say(chan, string);
+        });
     }
 }
 
