@@ -9,7 +9,7 @@ var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#dev', '#superbowl'],
+    channels: ['#dev'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -48,7 +48,10 @@ async function help(chan) {
     bot.say(chan, "$uspam [LINES] - Spams x lines of random unicode characters of varying length")
 }
 
-async function flood(text, chan, amt) {
+async function flood(chan, arg) {
+    arg.shift() //$flood
+    let amt = arg.shift() //number
+    var text = arg.join(" ")
     if (amt > 100000) {
         bot.say(chan, "no");
     } else {
@@ -83,7 +86,7 @@ async function uspam(chan, amt) {
         bot.say(chan, "no")
     } else {
         for(var i=0; i < amt; i++){
-            var string = randomext.integer(9,0) + randomext.uString(120,40);
+            var string = "" + randomext.integer(9,0) + randomext.uString(120,40);
             await timer(5);
             bot.say(chan, string);
         }    
@@ -107,10 +110,7 @@ bot.addListener('message', function(nick, to, text, from) {
     if (args[0] === '$help') {
         help(to);
     } else if (args[0] === '$flood') {
-        args.shift()
-        let amt = args.shift()
-        var string = args.join(" ")
-        flood(string, to, amt);
+        flood(to, args)
     } else if (args[0] === '$sneed') {
         sneed(to);
     } else if (args[0] === '$ctcpflood') {
