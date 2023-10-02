@@ -9,7 +9,7 @@ var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#superbowl', '#dev'],
+    channels: ['#dev'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -49,7 +49,7 @@ async function help(chan) {
 }
 
 async function flood(text, chan, amt) {
-    if (amt > '100000') {
+    if (amt > 100000) {
         bot.say(chan, "no");
     } else {
         for(var i=0; i < amt; i++){
@@ -68,7 +68,7 @@ async function sneed(chan) {
 }
 
 async function ctcp(target, text, amt) {
-    if (amt > '100000') {
+    if (amt > 100000) {
         bot.say(chan, "no");
     } else {
         for(var i=0; i < amt; i++){
