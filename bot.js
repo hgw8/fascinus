@@ -10,7 +10,7 @@ var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#dev'],
+    channels: ['#dev', '#superbowl'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -115,7 +115,6 @@ async function rspam(chan, amt) {
 }
 
 async function art(chan, url) {
-
     var ext = path.extname(url)
     if (ext === ".png") { 
         var filetype = "png"
@@ -157,27 +156,20 @@ async function godwords(chan, amt) {
     if (amt > 100000) {
         bot.say(chan, "no")
     } else {
-        
         if (amt === undefined) {
             var amt = 50
         }
-        //for(var i=0; i < amt; i++){
-        //    var word = randomWords({ exactly: 1 });
-        //    text.push(word);
-        //    var string = text.join(" ")  
-        //}
-        const worker = new Worker('./wordgen.js', { 
+        const worker = new Worker('./commands/godwords.js', { 
             workerData: {
                 amt
             }
         });
         worker.once('message', (string) => {
-            console.log('Received the hashedArray from the worker thread!');
+            console.log('Received string from worker, posting.');
             bot.say(chan, string);
         });
     }
 }
-
 
 bot.addListener('message', function(nick, to, text, from) {
     var args = text.split(' ');
