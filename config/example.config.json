@@ -16,5 +16,18 @@
         "flood_protection": "false",
         "flood_protection_delay": "0",
         "command_listen_timeout": "2500"
+    },
+    "errorhandling": {
+        "error_logging": "true",
+        "error_channel": "#CHANNELTOSENDERRORSTO",
+        "error_channel_pass": ""
+    },
+    "colours": {
+        "warning": "08",
+        "error": "04",
+        "brackets": "00"
+    },
+    "misc": {
+        "logging": "true"
     }
 }
