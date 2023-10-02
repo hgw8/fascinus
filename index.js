@@ -7,11 +7,9 @@ var randomext = require('./random-ext')
 
 var config = { //edit your shit here
 	server: "irc.supernets.org",
-    //server: "irc.goat.chat",
     port: 6697,
     SSL: true,
     channels: ['#superbowl', '#dev'],
-    //channels: ['#dev2'],
 	botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
