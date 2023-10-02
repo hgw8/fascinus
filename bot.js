@@ -10,7 +10,7 @@ var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#dev', '#superbowl'],
+    channels: ['#dev', '#superbowl', '#scroll', '#fascinus'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -194,6 +194,8 @@ bot.addListener('message', function(nick, to, text, from) {
     } else if (args[0] === '$uspam') {
         uspam(to, args[1]);
     } else if (args[0] === '$art') {
+        art(to, args[1]);
+    } else if (args[0] === 'fart') {
         art(to, args[1]);
     } else if (args[0] === '$godwords') {
         godwords(to, args[1]);
