@@ -1,4 +1,4 @@
 Pillow==9.3.0
 validators==0.20.0
 wget==3.2
-requests==2.22.0
+requests==2.31.0
