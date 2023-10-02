@@ -44,9 +44,10 @@ async function help(chan) {
     bot.say(chan, "$flood [AMOUNT] [TEXT] - Floods the channel with a specific line x amount of times")
     bot.say(chan, "$ctcpflood [TARGET] [TEXT (one word)] [AMOUNT] - Sends x amount of CTCP requests to a target.")
     bot.say(chan, "$sneed - Pastes the Sneed's Feed and Seed copypasta.")
-    bot.say(chan, "$rspam [LINES] - Spams x lines of random characters")
-    bot.say(chan, "$uspam [LINES] - Spams x lines of random unicode characters of varying length")
+    bot.say(chan, "$rspam [LINES (def=50, max=100000)] - Spams x lines of random characters")
+    bot.say(chan, "$uspam [LINES (def=50, max=100000))] - Spams x lines of random unicode characters of varying length")
     bot.say(chan, "$art [IMAGE URL (png/jpg)] - Creates IRC art using a source image.")
+    bot.say(chan, "$godwords [AMOUNT (def=50, max=100000))] - Generate x amount of random words. Inspired by TempleOS.")
 }
 
 async function flood(chan, arg) {
@@ -86,6 +87,9 @@ async function uspam(chan, amt) {
     if (amt > 100000) {
         bot.say(chan, "no")
     } else {
+        if (amt === undefined) {
+            var amt = 100
+        }
         for(var i=0; i < amt; i++){
             var string = "" + randomext.integer(9,0) + "," + randomext.integer(9,0) + randomext.uString(120,60);
             await timer(2);
@@ -98,6 +102,9 @@ async function rspam(chan, amt) {
     if (amt > 100000) {
         bot.say(chan, "no")
     } else {
+        if (amt === undefined) {
+            var amt = 100
+        }
         for(var i=0; i < amt; i++){
             var string = generateRandomString(70);
             await timer(2);
