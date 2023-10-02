@@ -78,22 +78,18 @@ async function ctcp(target, text, amt) {
     }
 }
 
-async function rspam(chan, amt) {
-    if (amt > '100000') {
+async function spam(chan, amt, type) {
+    if (amt > 100000) {
         bot.say(chan, "no")
     } else {
         for(var i=0; i < amt; i++){
-            bot.say(chan, generateRandomString(randomext.integer(100,60)));
-        }    
-    }
-}
-
-async function uspam(chan, amt){
-    if (amt > '100000') {
-        bot.say(chan, "no")
-    } else {
-        for(var i=0; i < amt; i++){
-            bot.say(chan, "0" + randomext.integer(9,0) + randomext.uString(120,40));
+            if (type == "unicode") {
+                var string = randomext.integer(9,0) + randomext.uString(120,40);
+            } else if (type == "random") {
+                var string = generateRandomString(70);
+            }
+            await timer(5);
+            bot.say(chan, string);
         }    
     }
 }
@@ -109,9 +105,9 @@ bot.addListener('message', function(nick, to, text, from) {
     } else if (args[0] === '$ctcpflood') {
         ctcp(args[1], args[2], args[3]);
     } else if (args[0] === '$rspam') {
-        rspam(to, args[1])
+        spam(to, args[1], "random")
     } else if (args[0] === '$uspam') {
-        uspam(to, args[1]);
+        spam(to, args[1], "unicode");
     }
 });
 
