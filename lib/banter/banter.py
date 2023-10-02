@@ -14,34 +14,14 @@ import glob, os
 import requests
 
 def main(imgPath, delay, ASCIIWIDTH, COLORCHAR, FILLER, fileType):
-    if os.path.exists("image.png"):
-        os.remove("image.png")
-    if os.path.exists("image.jpg"):
-        os.remove("image.jpg")    
-    if os.path.exists("image.webp"):
-        os.remove("image.webp")
-    if os.path.exists("image.jpeg"):
-        os.remove("image.jpeg")
-    if os.path.exists("output.txt"):
-        os.remove("output.txt")
+    if os.path.exists("image."+fileType):
+        os.remove("image."+fileType)
     if validators.url(imgPath) == True:
-        print('URL')
-        print('Downloading image to ' +  "/home/node/app/image." + fileType)
-        #wget.download(imgPath, "/home/node/app/image." + fileType)
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0'}
         imagefile = requests.get(imgPath, headers=headers)
         open("/home/node/app/image." + fileType, "wb").write(imagefile.content)
-        if fileType == "png":
-            print('PNG')
-            imgPath = "/home/node/app/image.png"
-        if fileType == "jpg":
-            print('JPG')
-            imgPath = "/home/node/app/image.jpg"
-        if fileType == "webp":
-            print('WEBP')
-            imgPath = "/home/node/app/image.webp"
     
-    im = Image.open(imgPath, 'r')
+    im = Image.open("/home/node/app/image."+fileType, 'r')
     im = ImageOps.scale(im, ASCIIWIDTH / im.width)
     width, height = im.size
     pixel_values = list(im.getdata())
@@ -63,8 +43,6 @@ def main(imgPath, delay, ASCIIWIDTH, COLORCHAR, FILLER, fileType):
             currentPixel+=1
 
         print("".join(line))
-        with open("output.txt", "a") as f:
-            print("".join(line), file=f)
         if delay:
             time.sleep(delay)
         sys.stdout.flush()
