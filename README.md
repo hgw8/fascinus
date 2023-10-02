@@ -44,4 +44,4 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 
-This repository contains a modified version of banter (https://github.com/phy1729/banter) which is licensed under GNU-GPL v3.0
+This repository contains a modified version of banter (https://github.com/phy1729/banter) which is licensed under GNU-GPL v3.0 and as such, this license does not apply to the contents of lib/banter.
