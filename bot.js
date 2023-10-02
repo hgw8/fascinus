@@ -3,7 +3,7 @@ var fs = require("fs");
 var readline = require('readline');
 var path = require('path');
 var randomext = require('./random');
-const { nextTick } = require("process");
+var randomWords = require('better-random-words');
 
 var config = { //edit your shit here
     server: "irc.supernets.org",
@@ -88,7 +88,7 @@ async function uspam(chan, amt) {
     } else {
         for(var i=0; i < amt; i++){
             var string = "" + randomext.integer(9,0) + "," + randomext.integer(9,0) + randomext.uString(120,60);
-            await timer(10);
+            await timer(2);
             bot.say(chan, string);
         }    
     }
@@ -100,7 +100,7 @@ async function rspam(chan, amt) {
     } else {
         for(var i=0; i < amt; i++){
             var string = generateRandomString(70);
-            await timer(5);
+            await timer(2);
             bot.say(chan, string);
         }    
     }
@@ -145,6 +145,23 @@ async function art(chan, url) {
     });
 }
 
+async function godwords(chan, amt) {
+    if (amt > 100000) {
+        bot.say(chan, "no")
+    } else {
+        text = [];
+        if (amt === undefined) {
+            var amt = 50
+        }
+        for(var i=0; i < amt; i++){
+            var word = randomWords({ exactly: 1 });
+            text.push(word);
+            var string = text.join(" ")  
+        }
+        bot.say(chan, string);
+    }
+}
+
 
 bot.addListener('message', function(nick, to, text, from) {
     var args = text.split(' ');
@@ -162,6 +179,8 @@ bot.addListener('message', function(nick, to, text, from) {
         uspam(to, args[1]);
     } else if (args[0] === '$art') {
         art(to, args[1]);
+    } else if (args[0] === '$godwords') {
+        godwords(to, args[1]);
     }
 });
 
