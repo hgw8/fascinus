@@ -1,4 +1,4 @@
-# Fascinus
+# Fascinus (fa-see-nus)
 
 cold hard bot for cold hard chats
 
