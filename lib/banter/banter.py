@@ -20,6 +20,8 @@ def main(imgPath, delay, ASCIIWIDTH, COLORCHAR, FILLER, fileType):
         os.remove("image.jpg")    
     if os.path.exists("image.webp"):
         os.remove("image.webp")
+    if os.path.exists("image.jpeg"):
+        os.remove("image.jpeg")
     if os.path.exists("output.txt"):
         os.remove("output.txt")
     if validators.url(imgPath) == True:

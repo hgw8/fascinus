@@ -10,7 +10,7 @@ var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#dev', '#fascinus'],
+    channels: ['#dev', '#superbowl'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -122,8 +122,10 @@ async function art(chan, url) {
         var filetype = "jpg"
     } else if (ext === ".webp") {
         var filetype = "webp"
+    } else if (ext === ".jpeg") {
+        var filetype = "jpeg"
     } else {
-        bot.say(chan, "Image must be PNG or JPG");
+        bot.say(chan, "Image must be PNG, JPG, JPEG, WEBP");
         return
     }
     console.log("Starting Banter")
