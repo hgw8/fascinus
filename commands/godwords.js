@@ -1,6 +1,6 @@
 const { parentPort, workerData } = require('worker_threads');
 const { amt } = workerData;
-var randomWords = require('better-random-words');
+var randomWords = require('../lib/randomword');
 
 var output = [];
 var string = [];

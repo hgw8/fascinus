@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "better-random-words": "^1.0.0",
     "fs": "^0.0.1-security",
     "irc": "^0.5.2"
   },

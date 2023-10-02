@@ -2,7 +2,7 @@ var irc = require("irc");
 var fs = require("fs");
 var readline = require('readline');
 var path = require('path');
-var randomext = require('./random');
+var randomext = require('./lib/randomnum');
 const { Worker } = require('worker_threads');
 //var randomWords = require('better-random-words');
 
@@ -10,7 +10,7 @@ var config = { //edit your shit here
     server: "irc.supernets.org",
     port: 6697,
     SSL: true,
-    channels: ['#dev', '#superbowl'],
+    channels: ['#dev', '#fascinus'],
     botName: "fascinus",
     userName: "fascinus",
     realName: "Sneed"
@@ -128,7 +128,7 @@ async function art(chan, url) {
     }
     console.log("Starting Banter")
     const spawn = require("child_process").spawn;
-    const pythonProcess = spawn('python3', ["banter/banter.py", url, "-t", filetype]) 
+    const pythonProcess = spawn('python3', ["lib/banter/banter.py", url, "-t", filetype]) 
     pythonProcess.stdout.on('data', (data) => {
         console.log(data.toString())
     });
