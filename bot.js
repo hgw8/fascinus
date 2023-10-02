@@ -42,11 +42,11 @@ const generateRandomString = (amt) => {
 
 async function help(chan) {
     bot.say(chan, 'Fascinus - https://git.supernets.org/hogwart7/fascinus')
-    bot.say(chan, "$flood [AMOUNT] [TEXT] - Floods the channel with a specific line x amount of times")
+    bot.say(chan, "$flood [AMOUNT (max=10000)] [TEXT] - Floods the channel with a specific line x amount of times")
     bot.say(chan, "$ctcpflood [TARGET] [TEXT (one word)] [AMOUNT] - Sends x amount of CTCP requests to a target.")
     bot.say(chan, "$sneed - Pastes the Sneed's Feed and Seed copypasta.")
-    bot.say(chan, "$rspam [LINES (def=100, max=100000)] - Spams x lines of random characters")
-    bot.say(chan, "$uspam [LINES (def=100, max=100000))] - Spams x lines of random unicode characters of varying length")
+    bot.say(chan, "$rspam [LINES (def=100, max=10000)] - Spams x lines of random characters")
+    bot.say(chan, "$uspam [LINES (def=100, max=10000)] - Spams x lines of random unicode characters of varying length")
     bot.say(chan, "$art [IMAGE URL (png/jpg/webp/jpeg)] - Creates IRC art using a source image.")
     bot.say(chan, "$godwords [AMOUNT (def=50, max=100000)] - Generate x amount of random words. Inspired by TempleOS.")
 }
@@ -74,7 +74,7 @@ async function sneed(chan) {
 }
 
 async function ctcp(target, text, amt) {
-    if (amt > 100000) {
+    if (amt > 10000) {
         bot.say(chan, "no");
     } else {
         for(var i=0; i < amt; i++){
@@ -85,7 +85,8 @@ async function ctcp(target, text, amt) {
 }
 
 async function uspam(chan, amt) {
-    if (amt > 100000) {
+    var arr = [];
+    if (amt > 10000) {
         bot.say(chan, "no")
     } else {
         if (amt === undefined) {
@@ -94,13 +95,16 @@ async function uspam(chan, amt) {
         for(var i=0; i < amt; i++){
             var string = "" + randomext.integer(9,0) + "," + randomext.integer(9,0) + randomext.uString(120,60);
             await timer(2);
-            bot.say(chan, string);
-        }    
+            arr.push(string)
+        }
+        var output = arr.join("\n")
+        bot.say(chan, output);  
     }
 }
 
 async function rspam(chan, amt) {
-    if (amt > 100000) {
+    var arr = []
+    if (amt > 10000) {
         bot.say(chan, "no")
     } else {
         if (amt === undefined) {
@@ -109,8 +113,10 @@ async function rspam(chan, amt) {
         for(var i=0; i < amt; i++){
             var string = generateRandomString(70);
             await timer(2);
-            bot.say(chan, string);
-        }    
+            arr.push(string)
+        }
+        var output = arr.join("\n")
+        bot.say(chan, output);
     }
 }
 
