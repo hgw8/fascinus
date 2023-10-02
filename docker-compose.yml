@@ -4,3 +4,5 @@ services:
         container_name: fascinus
         build: .
         restart: always
+        dns:
+            - 1.1.1.1
