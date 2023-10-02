@@ -18,6 +18,10 @@ cold hard bot for cold hard chats
 2. Modify the info in the config block in `bot.js` to your taste.
 3. Run `docker compose up` to begin. Append `-d` to start in the background and `--build` if you make any changes to any files
 
+## Support
+
+If you need assistance with installation or usage, join #5000 on `irc.supernets.org`
+
 ## Credits
 
 - [phy1729/banter](https://github.com/phy1729/banter) - $art uses a version of banter modified to allow URLs in place of local image files. These changes will be published upstream once refined.
