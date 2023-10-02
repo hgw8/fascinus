@@ -41,7 +41,7 @@ const generateRandomString = (amt) => {
 }
 
 async function help(chan) {
-    bot.say(chan, 'Fascinus - https://git.supernets.org/hogwart7/fascinus')
+    bot.say(chan, 'Fascinus - https://git.supernets.org/zerokek/fascinus')
     bot.say(chan, "$flood [AMOUNT] [TEXT] - Floods the channel with a specific line x amount of times")
     bot.say(chan, "$ctcpflood [TARGET] [TEXT (one word)] [AMOUNT] - Sends x amount of CTCP requests to a target.")
     bot.say(chan, "$sneed - Pastes the Sneed's Feed and Seed copypasta.")

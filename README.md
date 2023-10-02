@@ -30,7 +30,7 @@ If you need assistance with installation or usage, join #5000 on `irc.supernets.
 
 ISC License
 
-Copyright (c) 2023 hogwart7
+Copyright (c) 2023 zerokek
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
