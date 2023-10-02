@@ -1,0 +1,20 @@
+{
+    "irc": {
+        "server": "irc.supernets.org",
+        "port": 6697,
+        "ssl": "true",
+        "channels": [
+            "#5000"
+        ],
+        "nickname": "fascinus",
+        "username": "fascinus",
+        "realname": "git.supernets.org/hgw/fascinus",
+        "autorejoin": "true",
+        "prefix": "$"
+    },
+    "floodprotect": {
+        "flood_protection": "false",
+        "flood_protection_delay": "0",
+        "command_listen_timeout": "2500"
+    }
+}

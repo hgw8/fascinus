@@ -14,8 +14,8 @@ cold hard bot for cold hard chats
 
 ## Deployment
 
-1. Install Docker (required) and Docker Compose (optional, but strongly recommended)
-2. Modify the info in the config block in `bot.js` to your taste.
+1. Install Docker (required) and Docker Compose (optional, but strongly recommended, following instructions assume its usage)
+2. Copy `config/example.config.json` to `config/config.json` and modify the contents to your preference.
 3. Run `docker compose up` to begin. Append `-d` to start in the background and `--build` if you make any changes to any files
 
 ## Support
@@ -40,7 +40,7 @@ If you need assistance with installation or usage, join #5000 on `irc.supernets.
 
 ISC License
 
-Copyright (c) 2023 hogwart7
+Copyright (c) 2023 hgw7
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above

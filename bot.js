@@ -1,3 +1,4 @@
+var config = require('./config/config.json')
 var irc = require("irc");
 var fs = require("fs");
 var readline = require('readline');
@@ -6,26 +7,19 @@ var randomext = require('./lib/randomnum');
 const { Worker } = require('worker_threads');
 //var randomWords = require('better-random-words');
 
-var config = { //edit your shit here
-    server: "irc.supernets.org",
-    port: 6697,
-    SSL: true,
-    channels: ['#dev', '#superbowl', '#scroll', '#fascinus'],
-    botName: "fascinus",
-    userName: "fascinus",
-    realName: "Sneed"
-};
-
-var bot = new irc.Client(config.server, config.botName, {
-    channels: config.channels,
-    secure: config.SSL,
-    port: config.port,
-    autoRejoin: true,
-    userName: config.userName,
-    realName: config.realName,
-    floodProtection: false,
-    floodProtectionDelay: 0
+var bot = new irc.Client(config.irc.server, config.irc.nickname, {
+    channels: config.irc.channels,
+    secure: config.irc.ssl,
+    port: config.irc.port,
+    autoRejoin: config.irc.autorejoin,
+    userName: config.irc.username,
+    realName: config.irc.realname,
+    floodProtection: config.floodprotect.flood_protection,
+    floodProtectionDelay: config.floodprotect.flood_protection_delay
 });
+
+const msgTimeout = new Set();
+const msgTimeoutMsg = new Set();
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
@@ -201,6 +195,49 @@ bot.addListener('message', function(nick, to, text, from) {
         godwords(to, args[1]);
     }
 });
+
+bot.addListener('message', function(nick, to, text, from) {
+    if (text.startsWith(config.irc.prefix)) {
+        if (msgTimeout.has(to)) {
+            if (msgTimeoutMsg.has("yes")) {
+                return;
+            } else {
+                bot.say(to, errorMsg+" You are sending commands too quickly")
+                msgTimeoutMsg.add("yes");
+                setTimeout(() => {
+                    msgTimeoutMsg.delete("yes");
+                }, config.floodprotect.command_listen_timeout)           
+            }
+        } else {
+            var args = text.split(' ');
+            var command = args[0].toLowerCase()
+            if (args[0] === '$help') {
+                help(to);
+            } else if (command === config.irc.prefix+'flood') {
+                flood(to, args)
+            } else if (command === config.irc.prefix+'sneed') {
+                sneed(to);
+            } else if (command === config.irc.prefix+'ctcpflood') {
+                ctcp(args[1], args[2], args[3]);
+            } else if (command === config.irc.prefix+'rspam') {
+                rspam(to, args[1])
+            } else if (command === config.irc.prefix+'uspam') {
+                uspam(to, args[1]);
+            } else if (command === config.irc.prefix+'art') {
+                art(to, args[1]);
+            } else if (command === config.irc.prefix+'fart') {
+                art(to, args[1]);
+            } else if (command === config.irc.prefix+'godwords') {
+                godwords(to, args[1]);
+            }      
+            msgTimeout.add(to);
+            setTimeout(() => {
+                msgTimeout.delete(to);
+            }, config.floodprotect.command_listen_timeout)
+        }
+    }
+})
+
 
 bot.addListener('error', function(message) {
 	console.log('error: ', message);
