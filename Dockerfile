@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 RUN apt update && apt install -y python3 python3-pip wget
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 WORKDIR /home/node/app
