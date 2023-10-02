@@ -1,4 +1,4 @@
-# Fascinus (fa-see-nus)
+# Fascinus
 
 cold hard bot for cold hard chats
 
@@ -21,6 +21,16 @@ cold hard bot for cold hard chats
 ## Support
 
 If you need assistance with installation or usage, join #5000 on `irc.supernets.org`
+
+## SATISFIED CUSTOMERS
+
+- irc.pine64.org #Pine64 - in reference to spam caused by a completely different bot.
+```
+<Nyaa> https://github.com/gill6151/fascinushey my internet is back
+<Nyaa> oh
+<Nyaa> right
+<Nyaa> yeah i found the source to the spambot, https://github.com/gill6151/fascinus
+```
 
 ## Credits
 
