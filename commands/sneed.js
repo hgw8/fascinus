@@ -1,8 +1,5 @@
 const config = require('../config/config.json')
 const { parentPort, workerData } = require('worker_threads');
-const { d1 } = workerData;
-var amt = d1
-var randomWords = require('../lib/randomword');
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
 warningMsg = ''+config.colours.brackets+'['+config.colours.warning+'WARNING'+config.colours.brackets+']'
@@ -17,11 +14,9 @@ function consoleLog(log) {
 }
 
 function errorMessage(error, code, extra) {
-    consoleLog('[godwords.errorMessage] '+error.code)
+    consoleLog('[sneed.errorMessage] '+error.code)
     if (code == "BAD") {
         var error = errorMsg+" SHITS_FUCKED_MAN: " + extra + " not found"
-    } else if (code == "TOOLARGE") {
-        var error = errorMsg+" Your request is too large (Maximum is 10000)"
     } else {
         var error = errorMsg+" Unknown error"
     }
@@ -34,26 +29,11 @@ async function sendUpstream(content) {
     process.exit()
 }
 
-function gen(amt) {
-    consoleLog('[godwords.gen] Generating godwords output')
-    var output = [];
-    var string = [];
-    var text = [];
-    for(var i=0; i < amt; i++){
-        var word = randomWords({ exactly: 1 });
-        text.push(word);
-    }
-    var string = text.join(" ")
-    output.push(string);
-    sendUpstream(output);
-}
-
-if (amt > 10000) {
-    consoleLog('[godwords] Request too large was made, killing worker')
-    errorMessage("error", "TOOLARGE")
-} else {
-    if (amt === undefined) {
-        var amt = 50
-    }
-    gen(amt)
-}
+output = []
+output.push('THE SIGN IS A SUBTLE JOKE. THE SHOP IS CALLED \"SNEED\'S FEED & SEED\", WHERE')
+output.push('FEED AND SEED BOTH END IN THE SOUND "-EED", THUS RHYMING WITH THE NAME OF')
+output.push('THE OWNER, SNEED. THE SIGN SAYS THAT THE SHOP WAS "FORMERLY CHUCK\'S", IMPLYING')
+output.push('THAT THE TWO WORDS BEGINNING WITH "F" AND "S" WOULD HAVE ENDED WITH "-UCK",')
+output.push('RHYMING WITH "CHUCK". SO, WHEN CHUCK OWNED THE SHOP, IT WOULD HAVE BEEN CALLED')
+output.push('"CHUCK\'S FUCK AND SUCK".')
+sendUpstream(output.join("\n"))

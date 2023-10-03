@@ -1,11 +1,13 @@
 var config = require('./config/config.json')
 var irc = require("irc");
-var fs = require("fs");
-var readline = require('readline');
-var path = require('path');
-var randomext = require('./lib/randomnum');
 const { Worker } = require('worker_threads');
-//var randomWords = require('better-random-words');
+
+warningMsg = ''+config.colours.brackets+'['+config.colours.warning+'WARNING'+config.colours.brackets+']'
+errorMsg = ''+config.colours.brackets+'['+config.colours.error+'ERROR'+config.colours.brackets+']'
+const msgTimeout = new Set();
+const msgTimeoutMsg = new Set();
+const timer = ms => new Promise(res => setTimeout(res, ms))
+var hostmask = null
 
 var bot = new irc.Client(config.irc.server, config.irc.nickname, {
     channels: config.irc.channels,
@@ -18,56 +20,28 @@ var bot = new irc.Client(config.irc.server, config.irc.nickname, {
     floodProtectionDelay: config.floodprotect.flood_protection_delay
 });
 
-const msgTimeout = new Set();
-const msgTimeoutMsg = new Set();
-
-const timer = ms => new Promise(res => setTimeout(res, ms))
-
-const generateRandomString = (amt) => {
-    const chars =
-        "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890`!@#$%^&*()_+{}|\"\',./ᘈᷞኬᲡ᩶ᐨᅚ⸗⡳ᾟⓅᤲ⧛ሥ⸰⯠ᬨ⧻Შ⼷ᢕ᭄◁ⱉጻ៾᪅⎑ᘂᏤ⛰⃡";
-    const randomArray = Array.from(
-        { length: amt },
-        (v, k) => chars[Math.floor(Math.random() * chars.length)]
-    );
-    const randomString = randomArray.join("");
-    return randomString;
-}
-
-async function help(chan) {
-    bot.say(chan, 'Fascinus - https://git.supernets.org/hogwart7/fascinus')
-    bot.say(chan, "$flood [AMOUNT (max=10000)] [TEXT] - Floods the channel with a specific line x amount of times")
-    bot.say(chan, "$ctcpflood [TARGET] [TEXT (one word)] [AMOUNT] - Sends x amount of CTCP requests to a target.")
-    bot.say(chan, "$sneed - Pastes the Sneed's Feed and Seed copypasta.")
-    bot.say(chan, "$rspam [LINES (def=100, max=10000)] - Spams x lines of random characters")
-    bot.say(chan, "$uspam [LINES (def=100, max=10000)] - Spams x lines of random unicode characters of varying length")
-    bot.say(chan, "$art [IMAGE URL (png/jpg/webp/jpeg)] - Creates IRC art using a source image.")
-    bot.say(chan, "$godwords [AMOUNT (def=50, max=100000)] - Generate x amount of random words. Inspired by TempleOS.")
-}
-
-async function flood(chan, arg) {
-    arg.shift() //$flood
-    let amt = arg.shift() //number
-    var text = arg.join(" ")
-    if (amt > 100000) {
-        bot.say(chan, "no");
+function consoleLog(log) {
+    if (config.misc.logging === "true") {
+        console.log(log)
     } else {
-        for(var i=0; i < amt; i++){
-            bot.say(chan, text);
-        }
+        return;
     }
 }
 
-async function sneed(chan) {
-    bot.say(chan, 'THE SIGN IS A SUBTLE JOKE. THE SHOP IS CALLED \"SNEED\'S FEED & SEED\", WHERE')
-    bot.say(chan, 'FEED AND SEED BOTH END IN THE SOUND "-EED", THUS RHYMING WITH THE NAME OF')
-    bot.say(chan, 'THE OWNER, SNEED. THE SIGN SAYS THAT THE SHOP WAS "FORMERLY CHUCK\'S", IMPLYING')
-    bot.say(chan, 'THAT THE TWO WORDS BEGINNING WITH "F" AND "S" WOULD HAVE ENDED WITH "-UCK",')
-    bot.say(chan, 'RHYMING WITH "CHUCK". SO, WHEN CHUCK OWNED THE SHOP, IT WOULD HAVE BEEN CALLED')
-    bot.say(chan, '"CHUCK\'S FUCK AND SUCK".')
+function openPostWorker(chan, command, d1, d2, d3, d4, d5, d6) {
+    consoleLog(`[bot.openPostWorker] Opening ${command} worker`)
+    const worker = new Worker(`./commands/${command}.js`, { 
+        workerData: {
+        d1, d2, d3, d4, d5, d6 //d1-d6 equate to variables you can pass in to a worker, see  the example1 block below for an example (var1 there is d1 here). Further defined in individual command files.
+        }
+    });
+    worker.once('message', (string) => {
+        consoleLog(`[bot.openPostWorker.finalising] Got output from ${command}, sending to `+chan);
+        bot.say(chan, string);
+    });
 }
 
-async function ctcp(target, text, amt) {
+async function ctcp(target, text, amt) { //This can not be moved to its own file due to the nature of how it works
     if (amt > 10000) {
         bot.say(chan, "no");
     } else {
@@ -78,123 +52,37 @@ async function ctcp(target, text, amt) {
     }
 }
 
+async function help(chan) {
+    openPostWorker(chan, 'help')
+}
+
+async function flood(chan, arg) {
+    openPostWorker(chan, 'flood', arg)
+}
+
+async function sneed(chan) {
+    openPostWorker(chan, 'sneed')
+}
+
 async function uspam(chan, amt) {
-    var arr = [];
-    if (amt > 10000) {
-        bot.say(chan, "no")
-    } else {
-        if (amt === undefined) {
-            var amt = 100
-        }
-        for(var i=0; i < amt; i++){
-            var string = "" + randomext.integer(9,0) + "," + randomext.integer(9,0) + randomext.uString(120,60);
-            await timer(2);
-            arr.push(string)
-        }
-        var output = arr.join("\n")
-        bot.say(chan, output);  
-    }
+    openPostWorker(chan, 'uspam', amt)
 }
 
 async function rspam(chan, amt) {
-    var arr = []
-    if (amt > 10000) {
-        bot.say(chan, "no")
-    } else {
-        if (amt === undefined) {
-            var amt = 100
-        }
-        for(var i=0; i < amt; i++){
-            var string = generateRandomString(70);
-            await timer(2);
-            arr.push(string)
-        }
-        var output = arr.join("\n")
-        bot.say(chan, output);
-    }
+    openPostWorker(chan, 'rspam', amt)
 }
 
 async function art(chan, url) {
-    var ext = path.extname(url)
-    if (ext === ".png") { 
-        var filetype = "png"
-    } else if (ext === ".jpg") {
-        var filetype = "jpg"
-    } else if (ext === ".webp") {
-        var filetype = "webp"
-    } else if (ext === ".jpeg") {
-        var filetype = "jpeg"
-    } else {
-        bot.say(chan, "Image must be PNG, JPG, JPEG, WEBP");
-        return
-    }
-    console.log("Starting Banter")
-    const spawn = require("child_process").spawn;
-    const pythonProcess = spawn('python3', ["lib/banter/banter.py", url, "-t", filetype]) 
-    pythonProcess.stdout.on('data', (data) => {
-        console.log(data.toString())
-    });
-    await timer(5000);
-    fs.stat('output.txt', function(err, stat) {
-        if (err == null) {
-            console.log('File exists');
-            const rl = readline.createInterface({
-                input: fs.createReadStream('output.txt'),
-                crlfDelay: Infinity,
-            });
-            rl.on('line', (line) => {
-                bot.say(chan, line);
-            });   
-        } else if (err.code === 'ENOENT') {
-            console.log(err);
-            bot.say(chan, "Error")
-        } else {
-            bot.say(chan, "Other Error")
-        }
-    });
+    openPostWorker(chan, 'art', url)
 }
 
 async function godwords(chan, amt) {
-    if (amt > 100000) {
-        bot.say(chan, "no")
-    } else {
-        if (amt === undefined) {
-            var amt = 50
-        }
-        const worker = new Worker('./commands/godwords.js', { 
-            workerData: {
-                amt
-            }
-        });
-        worker.once('message', (string) => {
-            console.log('Received string from worker, posting.');
-            bot.say(chan, string);
-        });
-    }
+    openPostWorker(chan, 'godwords', amt)
 }
 
-bot.addListener('message', function(nick, to, text, from) {
-    var args = text.split(' ');
-    if (args[0] === '$help') {
-        help(to);
-    } else if (args[0] === '$flood') {
-        flood(to, args)
-    } else if (args[0] === '$sneed') {
-        sneed(to);
-    } else if (args[0] === '$ctcpflood') {
-        ctcp(args[1], args[2], args[3]);
-    } else if (args[0] === '$rspam') {
-        rspam(to, args[1])
-    } else if (args[0] === '$uspam') {
-        uspam(to, args[1]);
-    } else if (args[0] === '$art') {
-        art(to, args[1]);
-    } else if (args[0] === 'fart') {
-        art(to, args[1]);
-    } else if (args[0] === '$godwords') {
-        godwords(to, args[1]);
-    }
-});
+async function phish(chan, height, width) {
+    openPostWorker(chan, 'phish', height, width)
+}
 
 bot.addListener('message', function(nick, to, text, from) {
     if (text.startsWith(config.irc.prefix)) {
@@ -225,11 +113,11 @@ bot.addListener('message', function(nick, to, text, from) {
                 uspam(to, args[1]);
             } else if (command === config.irc.prefix+'art') {
                 art(to, args[1]);
-            } else if (command === config.irc.prefix+'fart') {
-                art(to, args[1]);
             } else if (command === config.irc.prefix+'godwords') {
                 godwords(to, args[1]);
-            }      
+            } else if (command === config.irc.prefix+'phish') {
+                phish(to, args[1], args[2])
+            }     
             msgTimeout.add(to);
             setTimeout(() => {
                 msgTimeout.delete(to);
@@ -240,7 +128,14 @@ bot.addListener('message', function(nick, to, text, from) {
 
 
 bot.addListener('error', function(message) {
-	console.log('error: ', message);
+    consoleLog('[ERROR]' +message) //Dump errors to console
 });
 
-console.log('Starting Fascinus');
+process.on('uncaughtException', function (err) {
+    console.error(err);
+    if (config.errorhandling.log_errors_to_irc == 'true') { //If logging errors to IRC is enabled then we send the error to that, otherwise we only consoleLog it
+        bot.say(config.errorhandling.error_channel, errorMsg+" "+err.stack.split('\n',1).join(" "))
+    }
+}); 
+
+consoleLog('Starting Fascinus');
