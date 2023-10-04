@@ -81,7 +81,11 @@ async function godwords(chan, amt) {
 }
 
 async function phish(chan, height, width) {
-    openPostWorker(chan, 'phish', height, width)
+    openPostWorker(chan, 'phish', height, width, "em")
+}
+
+async function symphish(chan, height, width) {
+    openPostWorker(chan, 'phish', height, width, "sym")
 }
 
 bot.addListener('message', function(nick, to, text, from) {
@@ -117,7 +121,9 @@ bot.addListener('message', function(nick, to, text, from) {
                 godwords(to, args[1]);
             } else if (command === config.irc.prefix+'phish') {
                 phish(to, args[1], args[2])
-            }     
+            } else if (command === config.irc.prefix+'symphish') {
+                symphish(to, args[1], args[2])
+            }
             msgTimeout.add(to);
             setTimeout(() => {
                 msgTimeout.delete(to);

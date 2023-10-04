@@ -1,8 +1,9 @@
 const config = require('../config/config.json')
 const { parentPort, workerData } = require('worker_threads');
-const { d1, d2 } = workerData;
+const { d1, d2, d3 } = workerData;
 var height = d1
 var width = d2
+var type = d3
 var phish = require('phishies');
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
@@ -33,6 +34,17 @@ async function sendUpstream(content) {
     process.exit()
 }
 
+function gen(height, width, type) {
+    consoleLog('[phish] Generating phish output')
+    if (type == "em") {
+        var aquarium = phish.aquarium(height, width)
+    } else if (type == "sym") {
+        var aquarium = phish.aquarium_sym(height, width)
+    }
+    var output = aquarium.join("\n")
+    sendUpstream(output)
+}
+
 if (height > 100) {
     consoleLog('[phish] Height requesteed was over the maximum allowable amount, defaulting to maximum')
     height = 100
@@ -49,7 +61,4 @@ if (width == undefined) {
     consoleLog('[phish] Width was not specified, defaulting to 5')
     width = 7
 }
-consoleLog('[phish] Generating phish output')
-var aquarium = phish.aquarium(height, width)
-var output = aquarium.join("\n")
-sendUpstream(output)
+gen(height, width, type)
