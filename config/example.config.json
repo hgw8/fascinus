@@ -15,7 +15,8 @@
     "floodprotect": {
         "flood_protection": "false",
         "flood_protection_delay": "0",
-        "command_listen_timeout": "2500"
+        "command_listen_timeout": "2500",
+        "enable_flood_commands": "true"
     },
     "errorhandling": {
         "error_logging": "true",

@@ -105,17 +105,9 @@ bot.addListener('message', function(nick, to, text, from) {
             var command = args[0].toLowerCase()
             if (args[0] === '$help') {
                 help(to);
-            } else if (command === config.irc.prefix+'flood') {
-                flood(to, args)
             } else if (command === config.irc.prefix+'sneed') {
                 sneed(to);
-            } else if (command === config.irc.prefix+'ctcpflood') {
-                ctcp(args[1], args[2], args[3]);
-            } else if (command === config.irc.prefix+'rspam') {
-                rspam(to, args[1])
-            } else if (command === config.irc.prefix+'uspam') {
-                uspam(to, args[1]);
-            } else if (command === config.irc.prefix+'art') {
+            }  else if (command === config.irc.prefix+'art') {
                 art(to, args[1]);
             } else if (command === config.irc.prefix+'godwords') {
                 godwords(to, args[1]);
@@ -123,6 +115,17 @@ bot.addListener('message', function(nick, to, text, from) {
                 phish(to, args[1], args[2])
             } else if (command === config.irc.prefix+'symphish') {
                 symphish(to, args[1], args[2])
+            }
+            if (config.floodprotect.enable_flood_commands == "true") {
+                if (command === config.irc.prefix+'flood') {
+                    flood(to, args)
+                } else if (command === config.irc.prefix+'ctcpflood') {
+                    ctcp(args[1], args[2], args[3]);
+                } else if (command === config.irc.prefix+'rspam') {
+                    rspam(to, args[1])
+                } else if (command === config.irc.prefix+'uspam') {
+                    uspam(to, args[1]);
+                }
             }
             msgTimeout.add(to);
             setTimeout(() => {
