@@ -55,10 +55,10 @@ if (width > 100) {
 }
 if (height == undefined) {
     consoleLog('[phish] Height was not specified, defaulting to 5')
-    height = 5
+    height = 6
 }
 if (width == undefined) {
     consoleLog('[phish] Width was not specified, defaulting to 5')
-    width = 7
+    width = 10
 }
 gen(height, width, type)
