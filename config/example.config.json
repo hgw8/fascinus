@@ -30,5 +30,11 @@
     },
     "misc": {
         "logging": "true"
+    },
+    "phish": {
+        "default_height": "6",
+        "default_width": "10",
+        "max_height": "100",
+        "max_width": "100"
     }
 }

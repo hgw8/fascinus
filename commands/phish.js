@@ -45,20 +45,20 @@ function gen(height, width, type) {
     sendUpstream(output)
 }
 
-if (height > 100) {
+if (height > config.phish.max_height) {
     consoleLog('[phish] Height requesteed was over the maximum allowable amount, defaulting to maximum')
-    height = 100
+    height = config.phish.max_height
 }
-if (width > 100) {
+if (width > config.phish.max_width) {
     consoleLog('[phish] Width requesteed was over the maximum allowable amount, defaulting to maximum')
-    width = 100
+    width = config.phish.max_width
 }
 if (height == undefined) {
-    consoleLog('[phish] Height was not specified, defaulting to 5')
-    height = 6
+    consoleLog('[phish] Height was not specified, defaulting to '+config.phish.default_height)
+    height = config.phish.default_height
 }
 if (width == undefined) {
-    consoleLog('[phish] Width was not specified, defaulting to 5')
-    width = 10
+    consoleLog('[phish] Width was not specified, defaulting to '+config.phish.default_width)
+    width = config.phish.default_width
 }
 gen(height, width, type)
